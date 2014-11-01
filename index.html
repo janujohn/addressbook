@@ -22,10 +22,10 @@
 <body>
     <nav class="navbar navbar-inverse" role="navigation">
             <div class="container">
-                <ul>
-                    <li> Create</li>
-                    <li> List</li>
-                </ul>    
+                 <div>Create</div>
+                    <div> List</div>
+                
+            </div>    
 </nav>
     <div class="container">
         <div class="row text-center pad-top ">
@@ -45,37 +45,43 @@
 <br/>
                                         <div class="form-group input-group">
                                             <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                            <input type="text" class="form-control" placeholder="Your Name" />
+                                            <input type="text" name ="name"class="form-control" placeholder="Your Name" />
                                         </div>
                                         
                                          <div class="form-group input-group">
                                             <span class="input-group-addon">@</span>
-                                            <input type="text" class="form-control" placeholder="Your Email" />
+                                            <input type="text" name="email"eclass="form-control" placeholder="Your Email" />
                                           </div>  
-                                        <div class="form-group input-group">
+                                        <div class="form-group input-group" id="profileForm" 
+                        data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                        data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                        data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
                                             <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                                            <input type="text" class="form-control" placeholder="Date of birth YYYY/MM/DD" />
+                                            <input type="text" name="dateofbirth"class="form-control" placeholder="Date of birth YYYY/MM/DD" 
+                                            data-bv-date="true"
+                data-bv-date-format="YYYY/MM/DD"
+                data-bv-date-message="The value is not a valid date" />
                                         </div>
                                         <div class="form-group input-group">
                                             <span class="input-group-addon"><i class="fa fa-phone"  ></i></span>
-                                            <input type="text" class="form-control" placeholder="Phone Number" />
+                                            <input type="text" name="phonenumber" class="form-control" placeholder="PhoneNumber" />
                                         </div>
                                         <div class="form-group input-group">
                                             <span class="input-group-addon"><i class="fa fa-image"  ></i></span>
-                                            <input type="file" class="form-control" placeholder="Image Upload" />
+                                            <input type="file" name="image"class="form-control" placeholder="Image Upload" />
                                         </div>
                                       <div class="form-group input-group">
                                             <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                            <input type="password" class="form-control" placeholder="Enter Password" />
+                                            <input type="password" name="password"class="form-control" placeholder="Enter Password" />
                                         </div>
                                      <div class="form-group input-group">
                                             <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                            <input type="password" class="form-control" placeholder="Retype Password" />
+                                            <input type="password" name="retypepassword" class="form-control" placeholder="Retype Password" />
                                         </div>
                                      
                                      <a href="#" class="btn btn-success ">Register Me</a>
                                     <hr />
-                                    Already Registered ?  <a href="#" >Login here</a>
+                                    <!--Already Registered ?  <a href="#" >Login here</a> -->
                                     </form>
                             </div>
                            
@@ -85,7 +91,11 @@
                 
         </div>
     </div>
-
+<script>
+$(document).ready(function() {
+    $('#profileForm').bootstrapValidator();
+});
+</script>
 
     <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
     <!-- CORE JQUERY  -->
@@ -95,3 +105,78 @@
    
 </body>
 </html>
+<?php
+
+  include "connect.php";
+$nameErr = $emailerr= $doberr = $phonenoerr = $imageerr = $passworderr = $repwderr = ""; 
+$name  = $email = $dob = $phoneno = $image = $password = $repwderr ="" ;
+
+ 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["name"])) {
+        $nameErr = "Missing";
+    }
+    else {
+        $name = $_POST["name"];
+    }
+ 
+    if (empty($_POST["email"])) {
+        $addrErr = "Missing";
+    }
+    else {
+        $address = $_POST["email"];
+    }
+ 
+    if (empty($_POST["dataofbirth"]))  {
+        $emailErr = "Missing";
+    }
+    else {
+        $email = $_POST["dateofbirth"];
+    }
+ 
+    if (!isset($_POST["phonenumber"])) {
+        $phonenoerr = "You must give 10 number";
+    }
+    else {
+        $phoneno = $_POST["phonenumber"];
+    }
+ 
+    if (empty($_POST["image"])) {
+        $imageerr = "set profile picture";
+    }
+    else {
+        $target ="images/";
+        $image = $target . basename($_FILES["image"]["name"]);
+        
+        if (file_exists($target . $_FILES["image"]["name"])) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}     
+
+        elseif (move_uploaded_file($_FILES["image"]["tmp_name"], $target)) {
+    echo "The file ". basename( $_FILES["image"]["name"]). " has been uploaded.";
+} else {
+    echo "Sorry, there was an error uploading your file.";
+}
+    }
+    if (empty($_POST["password"])) {
+        $passworderr = "Missing";
+    }
+    else {
+        $password = $_POST["password"];
+    }
+    if (empty($_POST["retypepassword"])) {
+        $repwderr = "Missing";
+    }
+    else {
+        if ($_POST["password"] == $_POST["retypepassword"])
+        {
+        $repwd = $_POST["retypepassword"];
+    }
+    else
+    {
+        echo "password not match";
+    }
+    }
+}
+?>
