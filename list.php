@@ -1,5 +1,7 @@
 <?php
 include "connect.php";
+$target_folder = 'images/';
+
 $selectQuery = "SELECT * FROM persons";
 
 $exe = mysql_query($selectQuery);
@@ -16,14 +18,14 @@ echo "<table border ='2'>
 
 while($row = mysql_fetch_array($exe)) {
 	echo "<tr>";
-	echo "<td>" . trim($row['id']) . "</td>";
-	echo "<td>" . trim($row['name']) . "</td>";
-	echo "<td>" . trim($row['email']) . "</td>";
-	echo "<td>" . trim($row['dateofbirth']) . "</td>";
-	echo "<td>" . trim($row['phoneno']) . "</td>";
-	echo "<td>" . $target_folder . trim($row['image']) . "</td>";
-	echo "<td>" . trim($row['address']) . "</td>";
-	echo "</tr>";
+	echo "<td>" . trim($row['id']) . "</td>\n"; 
+	echo "<td>" . trim($row['name']) . "</td>\n";
+	echo "<td>" . trim($row['email']) . "</td>\n";
+	echo "<td>" . trim($row['dateofbirth']) . "</td>\n";
+	echo "<td>" . trim($row['phonenumber']) . "</td>\n";
+	echo '<td><img height="50" src="' . $target_folder . trim($row['image']). '"></td>' . "\n";
+	echo "<td>" . trim($row['address']) . "</td>\n";
+	echo "</tr>\n";
 }	
 echo "</table>"; 
 
