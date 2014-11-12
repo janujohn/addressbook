@@ -1,11 +1,15 @@
+
 <?php
+include "header.php";
 include "connect.php";
 $target_folder = 'images/';
 
 $selectQuery = "SELECT * FROM persons";
 
 $exe = mysql_query($selectQuery);
-echo "<table border ='2'>
+echo '<div class="table-responsive">
+<table class="table table-striped table-bordered" width="100">
+  <thead>
 <tr>
 	<th>Id</th>
 	<th>Name</th>
@@ -14,7 +18,10 @@ echo "<table border ='2'>
 	<th>Phoneno</th>
 	<th>Image</th>
 	<th>Address</th>
-</tr>";
+	<th>Action</th>
+
+</tr>
+</thead><tbody>';
 
 while($row = mysql_fetch_array($exe)) {
 	echo "<tr>";
@@ -25,7 +32,12 @@ while($row = mysql_fetch_array($exe)) {
 	echo "<td>" . trim($row['phonenumber']) . "</td>\n";
 	echo '<td><img height="50" src="' . $target_folder . trim($row['image']). '"></td>' . "\n";
 	echo "<td>" . trim($row['address']) . "</td>\n";
+	echo "<td>" . '<a href="index.html">Edit</a>' . "</td>\n";
 	echo "</tr>\n";
 }	
-echo "</table>"; 
+echo "</tbody>";
+echo "</table>";
+echo "</div>";
 
+include "footer.php";
+?>
