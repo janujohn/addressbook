@@ -30,9 +30,9 @@ while($row = mysql_fetch_array($exe)) {
 	echo "<td>" . trim($row['email']) . "</td>\n";
 	echo "<td>" . trim($row['dateofbirth']) . "</td>\n";
 	echo "<td>" . trim($row['phonenumber']) . "</td>\n";
-	echo '<td><img height="50" src="' . $target_folder . trim($row['image']). '"></td>' . "\n";
+	echo '<td><img height="50" src="' . $target_folder . trim($row['image']). '"></td> ' . "\n";
 	echo "<td>" . trim($row['address']) . "</td>\n";
-	echo "<td>" . '<a href="index.html">Edit</a>' . "</td>\n";
+	echo '<td><a href="edit.php?id=' . $row['id'] . '">Edit</a>' . "</td>\n";
 	echo "</tr>\n";
 }	
 echo "</tbody>";
