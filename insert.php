@@ -4,7 +4,7 @@ $name = mysql_escape_string($_POST['name']);
 $email = mysql_escape_string($_POST['email']);
 $dob = mysql_escape_string($_POST['dateofbirth']);
 $phoneno = mysql_escape_string($_POST['phoneno']);
-$image = $_FILES['image']['name'];
+/*$image = $_FILES['image']['name'];
 $imageuniqname = sha1(uniqid(). $image . time());
 $imagearray = explode ('.', $image);
 $allowedExts = array("gif", "jpeg", "jpg", "png");
@@ -24,10 +24,10 @@ else
 {
 	echo "Invalid file extension";
 }
-
+*/
 $address = mysql_escape_string($_POST['address']);
 
-$insertQuery = "INSERT INTO persons (name, email, dateofbirth, phonenumber, image, address) VALUES ('$name', '$email', '$dob', '$phoneno', '$destimagename', '$address')";    
+$insertQuery = "INSERT INTO persons (name, email, dateofbirth, phonenumber, address) VALUES ('$name', '$email', '$dob', '$phoneno', '$address')";    
 
 $insertOk = mysql_query($insertQuery);
 
