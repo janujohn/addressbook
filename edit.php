@@ -1,3 +1,4 @@
+
 <?php
 include "header.php";
 include "connect.php";
@@ -20,9 +21,13 @@ $row = mysql_fetch_array($edit);
                         <strong>Details</strong>  
                     </div>
                     <div class="panel-body">
-                        <form role="form" action="insert.php" method="POST" enctype="multipart/form-data" >
+                        <form role="form" action="update.php" method="POST" enctype="multipart/form-data" >
 <br/>
                               
+                              
+                                    
+                                    <input type="hidden" name="id" value ="<?php echo $row['id']?>" />
+                               
                               <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                     <input type="text" name="name" class="form-control" placeholder="Contact Name" value = "<?php echo $row['name'];?>" />
@@ -42,18 +47,21 @@ $row = mysql_fetch_array($edit);
                                 </div>
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-camera"  ></i></span>
-                                    <input type="file" name="image"class="form-control" placeholder="Photo Upload" value = "<?php echo $row['image'];?>"/>
+                                    <input type="file" name="image" class="form-control" placeholder="Photo Upload" value="<?php echo $row['image'];?>"/>
                                 </div>
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-home"  ></i></span>
-                                    <textarea rows="4" cols ="50" name="address"class="form-control" placeholder="Address"><?php echo $row['address'];?></textarea>
+                                    <textarea rows="4" cols ="50" name="address" class="form-control" placeholder="Address"><?php echo $row['address'];?></textarea>
                                 </div>
                              
-                             <button type="submit" class="btn btn-success ">Add</button>
+                              <button type="submit" class="btn btn-success" name="update">Update</button>
+                           
                            
                             </form>
                     </div>
                 </div>
             </div>
 </div>
-<?php include "footer.php";	?>
+<?php 
+//include "update.php";
+include "footer.php";	?>
