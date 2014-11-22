@@ -6,6 +6,8 @@ $id = $_GET['id'];
 
 $edit = mysql_query("SELECT * FROM persons where id='$id'");
 $row = mysql_fetch_array($edit);
+$target_folder = 'images/';
+
 ?>
 
 <div class="row text-center pad-top">
@@ -47,8 +49,9 @@ $row = mysql_fetch_array($edit);
                                 </div>
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-camera"  ></i></span>
-                                    <input type="file" name="image" class="form-control" placeholder="Photo Upload" value="<?php echo $row['image'];?>"/>
-                                </div>
+                                    <input type="file" name="image" class="form-control" placeholder="Photo Upload" /></div>
+                                    <div><img height ="100" src="<?php echo 'images/' . $row['image'] ?> ">  </div>
+                                    
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-home"  ></i></span>
                                     <textarea rows="4" cols ="50" name="address" class="form-control" placeholder="Address"><?php echo $row['address'];?></textarea>
@@ -59,6 +62,7 @@ $row = mysql_fetch_array($edit);
                            
                             </form>
                     </div>
+
                 </div>
             </div>
 </div>
