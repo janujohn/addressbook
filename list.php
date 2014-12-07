@@ -39,5 +39,5 @@ echo "</tbody>";
 echo "</table>";
 echo "</div>";
 
-include "footer.php";
-?>
+include "footer.php"; ?>
+<a href ="index.php">AddDetails</a>
