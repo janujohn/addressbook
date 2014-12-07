@@ -17,33 +17,33 @@ if (! empty($_POST)) {
 	}
 	if (empty($_POST['email'])) {
 		$error = true;
-		$error_msg[] = "email field is required";
+		$error_msg['email'] = "email field is required";
 	} else {
 		$email = input_value($_POST['email']);
 		if ( !preg_match(".*[@].*", $email)) {
 			$error = true;
-			$error_msg[] = "Invalid e-mail id";
+			$error_msg['email'] = "Invalid e-mail id";
 		}
 	}
 	if (empty($_POST['dateofbirth'])) {
 		$error = true;
-		$error_msg[] = " date of birth field is required";
+		$error_msg['dob'] = " date of birth field is required";
 
 	} else {
 		$dob = input_value($_POST['dateofbirth']);
 		if (!$dob == 'YYYY-MM-DD') {
 			$error = true;
-			$error_msg[]  = "Enter YYYY-MM-DD format";
+			$error_msg['dob']  = "Enter YYYY-MM-DD format";
 		}
 	}
 	if (empty($_POST['phoneno'])) {
 		$error = true;
-		$error_msg[]  = "Phone number field is required"; 
+		$error_msg['phoneno']  = "Phone number field is required"; 
 	} else {
 		$phoneno = input_value($_POST['phoneno']);
 		if ((!preg_match("/(^[+-][0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/", '', $phoneno)) && strlen($phoneno  ) == 10) {
 			$error = true;
-			$error_msg[]  = "Enter valid phonenumber";
+			$error_msg['phoneno']  = "Enter valid phonenumber";
 		}
 
 	}
@@ -130,17 +130,25 @@ function input_value($data) {
                                                 <input type="text" name="name" class="form-control" placeholder="Contact Name" />
                                                 
                                             </div>
-                                            
-                                            <div class="form-group input-group">
+                                            <?php if ($error && ! empty($error_msg['email'])): ?>
+                                                <div class="alert alert-danger"><?=$error_msg['email']?></div>
+                                            <?php endif; ?>
+                                            <div class="form-group input-group <?=($error && $error_msg['email']) ? 'has-error' : ''?>">
                                                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                                                 <input type="text" name="email" class="form-control" placeholder="Email" />
                                                 
                                             </div>  
-                                            <div class="form-group input-group">
+                                            <?php if ($error && ! empty($error_msg['dob'])): ?>
+                                                <div class="alert alert-danger"><?=$error_msg['dob']?></div>
+                                            <?php endif; ?>
+                                            <div class="form-group input-group <?=($error && $error_msg['dob']) ? 'has-error' : ''?>">
                                                 <span class="input-group-addon"><i class="fa fa-calendar"  ></i></span>
                                                 <input type="text" name="dateofbirth" class="form-control" placeholder="Date of birth YYYY-MM-DD" />
                                             </div>
-                                            <div class="form-group input-group">
+                                            <?php if ($error && ! empty($error_msg['phoneno'])): ?>
+                                                <div class="alert alert-danger"><?=$error_msg['phoneno']?></div>
+                                            <?php endif; ?>
+                                            <div class="form-group input-group <?=($error && $error_msg['phoneno']) ? 'has-error' : ''?>">
                                                 <span class="input-group-addon"><i class="fa fa-phone"  ></i></span>
                                                 <input type="text" name="phoneno" class="form-control" placeholder="Phone Number" />
                                             </div>
