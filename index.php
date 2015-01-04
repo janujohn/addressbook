@@ -1,183 +1,51 @@
+<div class="container">
+             <div class="navbar">
+     <ul class="nav nav-pills">
+<li class="active"><a href="index.php">Contacts</a></li>
+ <li style="font-size:25px;"><a href="add.php"><i class="fa fa-plus-circle"></i></a></li> 
+</ul>
+</div>
+</div>
 <?php
-$error = false;
-$error_msg = array();
+include "header.php";
+include "connect.php";
+$target_folder = 'images/';
 
-if (! empty($_POST)) {
-	include "connect.php";
+$selectQuery = "SELECT * FROM persons";
 
-	if (empty($_POST['name'])) {
-		$error = true;
-		$error_msg['name'] = "This field is required";
-	} else {
-		$name = input_value($_POST['name']);
-		if(! preg_match("/^[a-zA-Z ]*$/",$name)) {
-			$error = true;
-			$error_msg['name'] = "Only letters and white space allowed";
-		}
-	}
-	if (empty($_POST['email'])) {
-		$error = true;
-		$error_msg['email'] = "email field is required";
-	} else {
-		$email = input_value($_POST['email']);
-		if (!preg_match("/.*[@].*/", $email)) {
-			$error = true;
-			$error_msg['email'] = "Invalid e-mail id";
-		}
-	}
-	if (empty($_POST['dateofbirth'])) {
-		$error = true;
-		$error_msg['dateofbirth'] = "date of birth field is required";
+$exe = mysql_query($selectQuery);
+echo '<div class="table-responsive">
+<table class="table table-striped table-bordered" width="100">
+  <thead>
+<tr>
+	<th>Id</th>
+	<th>Name</th>
+	<th>E-mail</th>
+	<th>Dateofbirth</th>
+	<th>Phoneno</th>
+	<th>Image</th>
+	<th>Address</th>
+	<th>Action</th>
 
-	} else {
-		$dob = input_value($_POST['dateofbirth']);
-		if (! preg_match("/^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$/",$dob)) {
-			$error = true;
-			$error_msg['dateofbirth']  = "Enter YYYY-MM-DD format";
-		}
-	}
-	if (empty($_POST['phoneno'])) {
-		$error = true;
-		$error_msg['phoneno']  = "Phone number field is required"; 
-	} else {
-		$phoneno = input_value($_POST['phoneno']);
-		/*if (!preg_match("/(^[+-][0-9]{1,2})-([0-9]{1,3})-([0-9]{1,3})-([0-9]{1,4})/")) {
-			$error = true;
-			$error_msg['phoneno']  = "Enter valid phonenumber"; 
-		} */
+</tr>
+</thead><tbody>';
 
-	}
-	$image = $_FILES['image']['name'];
-	if ($image) {
-		
-		$imageuniqname = sha1(uniqid(). $image . time());
-		$imagearray = explode ('.', $image);
-		$allowedExts = array("gif", "jpeg", "jpg", "png");
-		$ext = $imagearray[count($imagearray)-1];
-
-		if (in_array($ext, $allowedExts)) {
-			$destimagename = $imageuniqname . '.' . $ext;
-
-			$target_folder = 'images/';
-
-			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-				move_uploaded_file($_FILES['image']['tmp_name'], $target_folder . $destimagename) or die ('cannot upload');
-			}
-
-		}
-		else {
-			echo "Invalid file extension";
-		}
-	} 
-	$address = ($_POST['address']);
-	if ($address) {
-		$address = input_value($_POST['address']);
-	}
-	if (!$error) {
-		$insertQuery = "INSERT INTO persons (name, email, dateofbirth, phonenumber, image, address) VALUES ('$name', '$email', '$dob', '$phoneno', '$destimagename', '$address')";    
-
-		$insertOk = mysql_query($insertQuery);
-	} 
+while($row = mysql_fetch_array($exe)) {
+	echo "<tr>";
+	echo "<td>" . trim($row['id']) . "</td>\n"; 
+	echo "<td>" . trim($row['name']) . "</td>\n";
+	echo "<td>" . trim($row['email']) . "</td>\n";
+	echo "<td>" . trim($row['dateofbirth']) . "</td>\n";
+	echo "<td>" . trim($row['phonenumber']) . "</td>\n";
+	echo '<td><img height="50" src="' . $target_folder . trim($row['image']). '"></td> ' . "\n";
+	echo "<td>" . trim($row['address']) . "</td>\n";
+	echo '<td><a href="edit.php?id=' . $row['id'] . '">Edit</a>' . "</td>\n";
+	echo "</tr>\n";
 }	
+echo "</tbody>";
+echo "</table>";
+echo "</div>";
 
-function input_value($data) {
-	$data = trim($data);
-	$data = mysql_escape_string($data);
-	$data = htmlspecialchars($data);
-	return $data;
-}
+include "footer.php"; 
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-       
-        <title>Registration Page</title>
-        <!-- BOOTSTRAP CORE STYLE CSS -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet" />
-        <!-- FONTAWESOME STYLE CSS -->
-        <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
-        <!-- CUSTOM STYLE CSS -->
-        <link href="assets/css/style.css" rel="stylesheet" />    
-        <!-- GOOGLE FONT -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-    </head>
 
-    <body>
-        <div class="container">
-            <div class="row text-center pad-top">
-                <div class="col-md-12">
-                    <h2>Address Book</h2>
-                </div>
-            </div>
-
-             <div class="row  pad-top">
-                    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <strong>Details</strong>  
-                                </div>
-                                <div class="panel-body">
-                                    <form role="form" action="" method="POST" enctype="multipart/form-data" >
-    <br/>
-											<?php if ($error && ! empty($error_msg['name'])): ?>
-												<div class="alert alert-danger"><?=$error_msg['name']?></div>
-											<?php endif; ?>
-
-                                            <div class="form-group input-group <?=($error && $error_msg['name']) ? 'has-error' : ''?>">
-                                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                                <input type="text" name="name" class="form-control" placeholder="Contact Name" />
-                                                
-                                            </div>
-                                            <?php if ($error && ! empty($error_msg['email'])): ?>
-                                                <div class="alert alert-danger"><?=$error_msg['email']?></div>
-                                            <?php endif; ?>
-                                            <div class="form-group input-group <?=($error && $error_msg['email']) ? 'has-error' : ''?>">
-                                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                                <input type="text" name="email" class="form-control" placeholder="Email" />
-                                                
-                                            </div>  
-                                            <?php if ($error && ! empty($error_msg['dateofbirth'])): ?>
-                                                <div class="alert alert-danger"><?=$error_msg['dateofbirth']?></div>
-                                            <?php endif; ?>
-                                            <div class="form-group input-group <?=($error && $error_msg['dateofbirth']) ? 'has-error' : ''?>">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"  ></i></span>
-                                                <input type="text" name="dateofbirth" class="form-control" placeholder="Date of birth YYYY-MM-DD" />
-                                            </div>
-                                            <?php if ($error && ! empty($error_msg['phoneno'])): ?>
-                                                <div class="alert alert-danger"><?=$error_msg['phoneno']?></div>
-                                            <?php endif; ?>
-                                            <div class="form-group input-group <?=($error && $error_msg['phoneno']) ? 'has-error' : ''?>">
-                                                <span class="input-group-addon"><i class="fa fa-phone"  ></i></span>
-                                                <input type="text" name="phoneno" class="form-control" placeholder="Phone Number" />
-                                            </div>
-                                            <div class="form-group input-group">
-                                                <span class="input-group-addon"><i class="fa fa-camera"  ></i></span>
-                                                <input type="file" name="image"class="form-control" placeholder="Photo Upload" />
-                                                
-                                            </div>
-                                            <div class="form-group input-group">
-                                                <span class="input-group-addon"><i class="fa fa-home"  ></i></span>
-                                                <textarea rows="4" cols ="50" name="address"class="form-control" placeholder="Address"></textarea>
-                                            </div>
-                                         
-                                         <button type="submit" class="btn btn-success ">Add</button>
-                                       
-                                        </form>
-                                </div>
-                            </div>
-                        </div>
-            </div>
-        </div>
-   
-        <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
-        <!-- CORE JQUERY  -->
-        <script src="assets/plugins/jquery-1.10.2.js"></script>
-        <!-- BOOTSTRAP SCRIPTS  -->
-        <script src="assets/plugins/bootstrap.js"></script>
-   
- 
-      <a href ="list.php">ListingPage</a>
-   </body>
-</html>
